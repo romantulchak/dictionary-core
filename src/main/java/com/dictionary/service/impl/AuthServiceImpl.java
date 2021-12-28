@@ -33,7 +33,6 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
 
-
     /**
      * @inheritDoc
      */
