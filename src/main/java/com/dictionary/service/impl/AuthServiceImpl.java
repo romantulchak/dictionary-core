@@ -8,8 +8,8 @@ import com.dictionary.model.User;
 import com.dictionary.model.type.RoleType;
 import com.dictionary.repository.UserRepository;
 import com.dictionary.security.jwt.JwtUtils;
-import com.dictionary.security.payload.request.LoginRequest;
-import com.dictionary.security.payload.request.SignupRequest;
+import com.dictionary.security.payload.request.auth.LoginRequest;
+import com.dictionary.security.payload.request.auth.SignupRequest;
 import com.dictionary.security.service.UserDetailsImpl;
 import com.dictionary.service.AuthService;
 import com.dictionary.service.RoleService;
@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtils jwtUtils;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public JwtDTO authenticateUser(LoginRequest loginRequest) {
@@ -46,6 +46,9 @@ public class AuthServiceImpl implements AuthService {
         return new JwtDTO(userDetails.getId(), jwt, userDetails.getUsername(), userDetails.getEmail());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JwtDTO registerUser(SignupRequest signupRequest) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {

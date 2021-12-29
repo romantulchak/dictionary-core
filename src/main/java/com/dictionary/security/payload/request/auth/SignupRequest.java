@@ -1,4 +1,4 @@
-package com.dictionary.security.payload.request;
+package com.dictionary.security.payload.request.auth;
 
 import lombok.Data;
 

@@ -1,5 +1,6 @@
 package com.dictionary.controller;
 
+import com.dictionary.exception.language.LanguageAlreadyExistsException;
 import com.dictionary.exception.user.UsernameAlreadyExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,12 @@ public class AdviceController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ResponseEntity<?> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex, WebRequest webRequest) {
+        Map<String, Object> body = getBody(ex);
+        return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+    }
+
+    @ExceptionHandler(LanguageAlreadyExistsException.class)
+    public ResponseEntity<?> handleLanguageAlreadyExistsException(LanguageAlreadyExistsException ex, WebRequest webRequest) {
         Map<String, Object> body = getBody(ex);
         return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
     }

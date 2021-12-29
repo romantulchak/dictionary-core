@@ -4,6 +4,11 @@ import java.util.List;
 
 public interface AdminService {
 
-    List<String> findAvailableRoles();
+    /**
+     * Finds all roles in system
+     *
+     * @return all roles in system
+     */
+    List<String> findAllRoles();
 
 }

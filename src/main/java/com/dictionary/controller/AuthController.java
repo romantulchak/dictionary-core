@@ -1,8 +1,8 @@
 package com.dictionary.controller;
 
 import com.dictionary.dto.JwtDTO;
-import com.dictionary.security.payload.request.LoginRequest;
-import com.dictionary.security.payload.request.SignupRequest;
+import com.dictionary.security.payload.request.auth.LoginRequest;
+import com.dictionary.security.payload.request.auth.SignupRequest;
 import com.dictionary.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

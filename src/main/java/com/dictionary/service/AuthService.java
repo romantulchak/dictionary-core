@@ -3,8 +3,8 @@ package com.dictionary.service;
 import com.dictionary.dto.JwtDTO;
 import com.dictionary.exception.user.EmailAlreadyExistsException;
 import com.dictionary.exception.user.UsernameAlreadyExistsException;
-import com.dictionary.security.payload.request.LoginRequest;
-import com.dictionary.security.payload.request.SignupRequest;
+import com.dictionary.security.payload.request.auth.LoginRequest;
+import com.dictionary.security.payload.request.auth.SignupRequest;
 
 public interface AuthService {
 

@@ -9,8 +9,11 @@ import java.util.List;
 @Service
 public class AdminServiceImpl implements AdminService {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<String> findAvailableRoles() {
+    public List<String> findAllRoles() {
         return RoleType.roles();
     }
 }

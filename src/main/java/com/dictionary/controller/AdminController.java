@@ -24,6 +24,6 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN') OR hasRole('MODERATOR')")
     @JsonView(View.RoleView.class)
     public List<String> findAvailableRoles(){
-        return adminService.findAvailableRoles();
+        return adminService.findAllRoles();
     }
 }
