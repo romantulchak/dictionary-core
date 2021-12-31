@@ -1,7 +1,10 @@
 package com.dictionary.service;
 
+import com.dictionary.dto.LanguageDTO;
 import com.dictionary.exception.language.LanguageAlreadyExistsException;
 import com.dictionary.security.payload.request.language.CreateLanguageRequest;
+
+import java.util.List;
 
 public interface LanguageService {
 
@@ -14,4 +17,10 @@ public interface LanguageService {
      */
     void create(CreateLanguageRequest createLanguageRequest) throws LanguageAlreadyExistsException;
 
+    /**
+     * Finds all languages
+     *
+     * @return all languages
+     */
+    List<LanguageDTO> findAllLanguages();
 }

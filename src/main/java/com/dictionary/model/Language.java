@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,9 +35,10 @@ public class Language {
 
     private LocalDateTime updateAt;
 
-    public Language(){
+    @OneToMany(mappedBy = "language")
+    private List<Word> words;
 
-    }
+    public Language(){}
 
     public Language(String name, String code) {
         this.name = name;

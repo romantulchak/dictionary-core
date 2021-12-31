@@ -3,9 +3,9 @@ package com.dictionary.service;
 import com.dictionary.exception.role.RoleNotFoundException;
 import com.dictionary.model.Role;
 import com.dictionary.model.type.RoleType;
+import org.springframework.security.core.Authentication;
 
 import java.util.Set;
-import java.util.UUID;
 
 public interface RoleService {
 
@@ -22,8 +22,8 @@ public interface RoleService {
     /**
      * Finds all available roles for user
      *
-     * @param id user id
+     * @param authentication to get current user id in system
      * @return available roles for user
      */
-    Set<String> findRolesForUser(UUID id);
+    Set<String> findRolesForUser(Authentication authentication);
 }

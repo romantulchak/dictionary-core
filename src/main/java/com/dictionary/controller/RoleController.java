@@ -5,10 +5,13 @@ import com.dictionary.service.RoleService;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
-import java.util.UUID;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600L)
@@ -18,11 +21,11 @@ public class RoleController {
 
     private final RoleService roleService;
 
-    @GetMapping("/user-roles/{id}")
+    @GetMapping("/user-roles")
     @PreAuthorize("isAuthenticated()")
     @JsonView(View.RoleView.class)
-    public Set<String> findRolesForUser(@PathVariable("id") UUID id){
-        return roleService.findRolesForUser(id);
+    public Set<String> findRolesForUser(Authentication authentication){
+        return roleService.findRolesForUser(authentication);
     }
 
 }
