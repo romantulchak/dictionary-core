@@ -1,0 +1,2 @@
+ALTER TABLE IF EXISTS word
+    ADD COLUMN IF NOT EXISTS key varchar;

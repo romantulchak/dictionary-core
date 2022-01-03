@@ -44,15 +44,18 @@ public class Word {
 
     private LocalDateTime updateAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Language language;
+
+    @NotBlank
+    private String key;
 
     public Word(){}
 
-    public Word(String name, User user, Language language) {
+    public Word(String name, User user, Language language, String key) {
         this.name = name;
         this.capitalName = StringUtils.capitalize(name);
         this.lowercaseName = name.toLowerCase(Locale.ROOT);
@@ -60,5 +63,6 @@ public class Word {
         this.createAt = LocalDateTime.now();
         this.user = user;
         this.language = language;
+        this.key = key;
     }
 }
