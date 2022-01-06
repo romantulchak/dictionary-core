@@ -1,7 +1,7 @@
 package com.dictionary.service.impl;
 
 import com.dictionary.exception.language.LanguageNotFoundException;
-import com.dictionary.exception.word.WordAlreadyExistsException;
+import com.dictionary.exception.word.WordsAlreadyExistsException;
 import com.dictionary.model.Language;
 import com.dictionary.model.User;
 import com.dictionary.model.Word;
@@ -17,8 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,24 +31,44 @@ public class WordServiceImpl implements WordService {
      */
     @Override
     public void create(CreateWordRequest createWordRequest, Authentication authentication) {
-        if (wordRepository.existsByNameAndLanguageCode(createWordRequest.getWord(), createWordRequest.getCode())) {
-            throw new WordAlreadyExistsException(createWordRequest.getWord());
-        }
+        Set<String> existingWords = new HashSet<>();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         User user = new User().setId(userDetails.getId());
         Language language = languageRepository.findByCode(createWordRequest.getCode())
                 .orElseThrow((() -> new LanguageNotFoundException(createWordRequest.getCode())));
         List<Word> words = new ArrayList<>();
-        String key = KeyEncoder.encodeKey(createWordRequest.getWord());
-        Word mainWord = new Word(createWordRequest.getWord(), user, language, key);
+        String key = UUID.randomUUID().toString();
+        for (String word : createWordRequest.getWords()) {
+            if (wordRepository.existsByNameAndLanguageCode(word, createWordRequest.getCode())) {
+                existingWords.add(word);
+            } else {
+                words.add(initWord(user, key, language, word));
+            }
+        }
         createWordRequest.getLanguagesTo().forEach(translateTo -> {
             Language translatedLanguage = languageRepository.findByCode(translateTo.getCode())
                     .orElseThrow((() -> new LanguageNotFoundException(translateTo.getCode())));
-            Word translatedWord = new Word(translateTo.getWord(), user, translatedLanguage, key);
-            words.add(translatedWord);
+            translateTo.getWords().forEach(word -> {
+                words.add(initWord(user, key, translatedLanguage, word));
+            });
         });
-        words.add(mainWord);
+        if (!existingWords.isEmpty()) {
+            throw new WordsAlreadyExistsException(existingWords);
+        }
         wordRepository.saveAll(words);
+    }
+
+    /**
+     * Init word via call constructor
+     *
+     * @param user who create this word
+     * @param key for word
+     * @param language for word
+     * @param word name of word
+     * @return initialized word
+     */
+    private Word initWord(User user, String key, Language language, String word) {
+        return new Word(word, user, language, key);
     }
 
     /**
@@ -69,7 +88,7 @@ public class WordServiceImpl implements WordService {
     /**
      * Checks which case the word is in
      *
-     * @param word from client
+     * @param word           from client
      * @param translatedWord word after translation
      * @return word in the correct case since came from the client
      *         Ex: Привіт (ua) -> Hello (us)
