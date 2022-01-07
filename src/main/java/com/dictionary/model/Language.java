@@ -35,7 +35,7 @@ public class Language {
 
     private LocalDateTime updateAt;
 
-    @OneToMany(mappedBy = "language")
+    @OneToMany(mappedBy = "language", fetch = FetchType.LAZY)
     private List<Word> words;
 
     public Language(){}

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class CreateWordRequest {
@@ -14,7 +15,7 @@ public class CreateWordRequest {
     @NotBlank
     private String code;
 
-    List<String> words;
+    Set<String> words;
 
     List<CreateWordRequest> languagesTo;
 

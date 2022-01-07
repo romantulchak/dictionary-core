@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Locale;
 
 @Entity
@@ -51,7 +52,13 @@ public class Word {
     private Language language;
 
     @NotBlank
+    @Column(name = "key")
     private String key;
+
+    @ElementCollection
+    @CollectionTable(name = "word_keys", joinColumns = @JoinColumn(name = "word_id"))
+    @Column(name = "key")
+    private List<String> keys;
 
     public Word(){}
 

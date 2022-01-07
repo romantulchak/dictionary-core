@@ -27,7 +27,6 @@ public class LanguageController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("isAuthenticated()")
     @JsonView(View.LanguageView.class)
     public List<LanguageDTO> findAllLanguages(){
         return languageService.findAllLanguages();
