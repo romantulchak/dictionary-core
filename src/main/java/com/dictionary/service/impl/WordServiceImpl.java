@@ -6,6 +6,7 @@ import com.dictionary.exception.word.WordsAlreadyExistsException;
 import com.dictionary.model.Language;
 import com.dictionary.model.User;
 import com.dictionary.model.Word;
+import com.dictionary.projection.WordKeyProjection;
 import com.dictionary.repository.LanguageRepository;
 import com.dictionary.repository.WordRepository;
 import com.dictionary.security.payload.request.word.CreateWordRequest;
@@ -32,13 +33,41 @@ public class WordServiceImpl implements WordService {
     @Transactional
     @Override
     public void create(CreateWordRequest createWordRequest, Authentication authentication) {
-        Set<String> existingWords = new HashSet<>();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         User user = new User().setId(userDetails.getId());
+        String key = UUID.randomUUID().toString();
+        List<Word> words = new ArrayList<>(checkAndInitWordSToTranslate(createWordRequest, user, key));
+        createWordRequest.getLanguagesTo().forEach(translateTo -> {
+            Language translatedLanguage = languageRepository.findByCode(translateTo.getCode())
+                    .orElseThrow((() -> new LanguageNotFoundException(translateTo.getCode())));
+            words.addAll(createTranslatedWord(user, key, translateTo.getWords(), translatedLanguage));
+        });
+        wordRepository.saveAll(words);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> translateWord(String word, String languageFrom, String languageTo) {
+        WordKeyProjection keyProjection = getWordByNameAndCode(word, languageFrom).orElseThrow(WordTranslationNotFoundException::new);
+        return wordRepository.findByKeysInAndLanguageCode(keyProjection.getKey(), languageTo)
+                .stream()
+                .map(translatedWord -> getNameByRegister(word, translatedWord))
+                .toList();
+    }
+
+    /**
+     * @param createWordRequest to get words and language code
+     * @param user              to get user in system
+     * @param key               unique key for word to translate and translated words
+     * @return words to be stored
+     */
+    private List<Word> checkAndInitWordSToTranslate(CreateWordRequest createWordRequest, User user, String key) {
+        List<Word> words = new ArrayList<>();
         Language language = languageRepository.findByCode(createWordRequest.getCode())
                 .orElseThrow((() -> new LanguageNotFoundException(createWordRequest.getCode())));
-        List<Word> words = new ArrayList<>();
-        String key = UUID.randomUUID().toString();
+        Set<String> existingWords = new HashSet<>();
         for (String word : createWordRequest.getWords()) {
             if (wordRepository.existsByNameAndLanguageCode(word, createWordRequest.getCode())) {
                 existingWords.add(word);
@@ -49,14 +78,7 @@ public class WordServiceImpl implements WordService {
         if (!existingWords.isEmpty()) {
             throw new WordsAlreadyExistsException(existingWords);
         }
-        createWordRequest.getLanguagesTo().forEach(translateTo -> {
-            Language translatedLanguage = languageRepository.findByCode(translateTo.getCode())
-                    .orElseThrow((() -> new LanguageNotFoundException(translateTo.getCode())));
-             words.addAll(createTranslatedWord(user, key, translateTo.getWords(), translatedLanguage));
-        });
-        if (!words.isEmpty()){
-            wordRepository.saveAll(words);
-        }
+        return words;
     }
 
     /**
@@ -73,25 +95,13 @@ public class WordServiceImpl implements WordService {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> translateWord(String word, String languageFrom, String languageTo) {
-        Word keyProjection = getWordByNameAndCode(word, languageFrom).orElseThrow(WordTranslationNotFoundException::new);
-        return wordRepository.findByKeysInAndLanguageCode(keyProjection.getKey(), languageTo)
-                .stream()
-                .map(translatedWord -> getNameByRegister(word, translatedWord))
-                .toList();
-    }
-
-    /**
      * Finds word by its name and language code
      *
-     * @param name of word
-     * @param languageCode  code of language
-     * @return found word
+     * @param name         of word
+     * @param languageCode code of language
+     * @return {@link WordKeyProjection}
      */
-    private Optional<Word> getWordByNameAndCode(String name, String languageCode) {
+    private Optional<WordKeyProjection> getWordByNameAndCode(String name, String languageCode) {
         String wordInCapitalRegister = StringUtils.capitalize(name.toLowerCase());
         return wordRepository.findByCapitalNameAndLanguageCode(wordInCapitalRegister, languageCode);
     }
@@ -122,21 +132,21 @@ public class WordServiceImpl implements WordService {
      * gets keys for this word and add current key otherwise init word
      * and att it to list
      *
-     * @param user to set word creator
-     * @param key to set word key
-     * @param translatedWords from client
+     * @param user               to set word creator
+     * @param key                to set word key
+     * @param translatedWords    from client
      * @param translatedLanguage for getting language code
      * @return list with created words otherwise empty list
      */
     private List<Word> createTranslatedWord(User user, String key, Set<String> translatedWords, Language translatedLanguage) {
         List<Word> words = new ArrayList<>();
         translatedWords.forEach(translatedWord -> {
-            Optional<Word> foundedWord = getWordByNameAndCode(translatedWord, translatedLanguage.getCode());
+            Optional<Word> foundedWord = wordRepository.findWordKeys(translatedWord, translatedLanguage.getCode());
             if (foundedWord.isPresent()) {
                 Word word = foundedWord.get();
                 word.getKeys().add(key);
                 wordRepository.save(word);
-            }else{
+            } else {
                 words.add(initWord(user, key, translatedLanguage, translatedWord));
             }
         });

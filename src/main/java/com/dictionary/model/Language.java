@@ -6,16 +6,19 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "language")
 @Accessors(chain = true)
-public class Language {
+public class Language implements Comparable<Language> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,14 +38,35 @@ public class Language {
 
     private LocalDateTime updateAt;
 
-    @OneToMany(mappedBy = "language", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "language", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Word> words;
 
-    public Language(){}
+    public Language() {
+    }
 
     public Language(String name, String code) {
         this.name = name;
         this.code = code;
         this.createAt = LocalDateTime.now();
+    }
+
+    @Override
+    public int compareTo(@NotNull Language language) {
+        return Comparator.comparing(Language::getName)
+                .thenComparing(Language::getCode)
+                .compare(this, language);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Language language = (Language) o;
+        return id == language.id && Objects.equals(name, language.name) && Objects.equals(code, language.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, code);
     }
 }
