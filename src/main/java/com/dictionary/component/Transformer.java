@@ -1,9 +1,11 @@
 package com.dictionary.component;
 
 import com.dictionary.dto.LanguageDTO;
+import com.dictionary.dto.WordDTO;
 import com.dictionary.dto.user.RoleDTO;
 import com.dictionary.model.Language;
 import com.dictionary.model.Role;
+import com.dictionary.model.Word;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -20,5 +22,9 @@ public class Transformer {
 
     public LanguageDTO languageToDTO(Language language){
         return modelMapper.map(language, LanguageDTO.class);
+    }
+
+    public WordDTO wordToDTO(Word word){
+        return modelMapper.map(word, WordDTO.class);
     }
 }

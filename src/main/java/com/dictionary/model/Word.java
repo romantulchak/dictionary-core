@@ -60,9 +60,18 @@ public class Word {
     @Column(name = "key")
     private List<String> keys;
 
+    @Size(min = 3, max = 500)
+    @Column(name = "description")
+    private String description;
+
+    @ElementCollection
+    @CollectionTable(name = "word_examples", joinColumns = @JoinColumn(name = "word_id"))
+    @Column(name = "example")
+    private List<String> examples;
+
     public Word(){}
 
-    public Word(String name, User user, Language language, String key) {
+    public Word(String name, User user, Language language, String key, String description){
         this.name = name;
         this.capitalName = StringUtils.capitalize(name);
         this.lowercaseName = name.toLowerCase(Locale.ROOT);
@@ -71,5 +80,6 @@ public class Word {
         this.user = user;
         this.language = language;
         this.key = key;
+        this.description = description;
     }
 }

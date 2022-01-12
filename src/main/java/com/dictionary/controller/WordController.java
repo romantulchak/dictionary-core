@@ -1,5 +1,6 @@
 package com.dictionary.controller;
 
+import com.dictionary.dto.WordDTO;
 import com.dictionary.security.payload.request.word.CreateWordRequest;
 import com.dictionary.service.WordService;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,9 @@ public class WordController {
     }
 
     @GetMapping("/translate")
-    public List<String> translateWord(@RequestParam(value = "word") String word,
-                                      @RequestParam(value = "languageFrom") String languageFrom,
-                                      @RequestParam(value = "languageTo") String languageTo) {
+    public List<WordDTO> translateWord(@RequestParam(value = "word") String word,
+                                       @RequestParam(value = "languageFrom") String languageFrom,
+                                       @RequestParam(value = "languageTo") String languageTo) {
         return wordService.translateWord(word, languageFrom, languageTo);
     }
 

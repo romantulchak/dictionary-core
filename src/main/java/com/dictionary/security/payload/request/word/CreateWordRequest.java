@@ -15,7 +15,7 @@ public class CreateWordRequest {
     @NotBlank
     private String code;
 
-    Set<String> words;
+    private Set<WordDescription> words;
 
     List<CreateWordRequest> languagesTo;
 

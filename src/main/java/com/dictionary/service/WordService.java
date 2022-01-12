@@ -1,5 +1,6 @@
 package com.dictionary.service;
 
+import com.dictionary.dto.WordDTO;
 import com.dictionary.security.payload.request.word.CreateWordRequest;
 import org.springframework.security.core.Authentication;
 
@@ -23,7 +24,7 @@ public interface WordService {
      * @param word to translate
      * @param languageFrom language code from which it is translated Ex: us, ua, pl
      * @param languageTo language code to which it is translated Ex: us, ua, pl
-     * @return List of translated words found
+     * @return List of translated words found with description
      */
-    List<String> translateWord(String word, String languageFrom, String languageTo);
+    List<WordDTO> translateWord(String word, String languageFrom, String languageTo);
 }
