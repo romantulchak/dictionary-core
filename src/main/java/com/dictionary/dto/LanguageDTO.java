@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 public class LanguageDTO {
 
     @JsonView(View.LanguageView.class)
+    private long id;
+
+    @JsonView(View.LanguageView.class)
     private String name;
 
     @JsonView(View.LanguageView.class)

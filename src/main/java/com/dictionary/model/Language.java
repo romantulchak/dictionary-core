@@ -41,6 +41,11 @@ public class Language implements Comparable<Language> {
     @OneToMany(mappedBy = "language", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Word> words;
 
+    @NotBlank
+    @JoinColumn(name = "user_id")
+    @ManyToOne
+    private User user;
+
     public Language() {
     }
 

@@ -31,4 +31,10 @@ public class LanguageController {
     public List<LanguageDTO> findAllLanguages(){
         return languageService.findAllLanguages();
     }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("isAuthenticated() && (hasRole('MODERATOR') || hasRole('ADMIN') || @userAccessToLanguage.hasAccess(authentication, #id))")
+    public void delete(@PathVariable("id") long id){
+        languageService.delete(id);
+    }
 }

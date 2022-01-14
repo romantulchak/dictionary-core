@@ -64,4 +64,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Word> words;
+
+    @OneToMany(mappedBy = "user")
+    private List<Language> languages;
 }

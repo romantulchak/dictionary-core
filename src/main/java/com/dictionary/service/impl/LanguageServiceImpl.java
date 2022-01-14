@@ -42,4 +42,12 @@ public class LanguageServiceImpl implements LanguageService {
                 .map(transformer::languageToDTO)
                 .toList();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void delete(long id) {
+        this.languageRepository.deleteById(id);
+    }
 }

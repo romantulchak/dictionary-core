@@ -23,4 +23,11 @@ public interface LanguageService {
      * @return all languages
      */
     List<LanguageDTO> findAllLanguages();
+
+    /**
+     * Delete language from DB
+     *
+     * @param id of language to delete
+     */
+    void delete(long id);
 }
