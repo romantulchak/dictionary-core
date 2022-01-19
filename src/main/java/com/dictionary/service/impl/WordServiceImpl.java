@@ -36,7 +36,7 @@ public class WordServiceImpl implements WordService {
      */
     @Transactional
     @Override
-    public void create(CreateWordRequest createWordRequest, Authentication authentication) {
+    public void create(CreateWordRequest createWordRequest, Authentication authentication) throws LanguageNotFoundException {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         User user = new User().setId(userDetails.getId());
         String key = UUID.randomUUID().toString();
@@ -53,7 +53,7 @@ public class WordServiceImpl implements WordService {
      * {@inheritDoc}
      */
     @Override
-    public List<WordDTO> translateWord(String word, String languageFrom, String languageTo) {
+    public List<WordDTO> translateWord(String word, String languageFrom, String languageTo) throws WordTranslationNotFoundException {
         WordKeyProjection keyProjection = getWordByNameAndCode(word, languageFrom).orElseThrow(WordTranslationNotFoundException::new);
         return wordRepository.findByKeysInAndLanguageCode(keyProjection.getKey(), languageTo)
                 .stream()
@@ -67,7 +67,7 @@ public class WordServiceImpl implements WordService {
      * @param key               unique key for word to translate and translated words
      * @return words to be stored
      */
-    private List<Word> checkAndInitWordSToTranslate(CreateWordRequest createWordRequest, User user, String key) {
+    private List<Word> checkAndInitWordSToTranslate(CreateWordRequest createWordRequest, User user, String key) throws WordsAlreadyExistsException {
         List<Word> words = new ArrayList<>();
         Language language = languageRepository.findByCode(createWordRequest.getCode())
                 .orElseThrow((() -> new LanguageNotFoundException(createWordRequest.getCode())));

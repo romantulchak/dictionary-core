@@ -3,6 +3,7 @@ package com.dictionary.service;
 import com.dictionary.dto.LanguageDTO;
 import com.dictionary.exception.language.LanguageAlreadyExistsException;
 import com.dictionary.security.payload.request.language.CreateLanguageRequest;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -30,4 +31,14 @@ public interface LanguageService {
      * @param id of language to delete
      */
     void delete(long id);
+
+    /**
+     * Finds languages with user access to modify/delete
+     *
+     * @param page number of current page
+     * @param size number of elements per page
+     * @param authentication to check user access to language
+     * @return languages with user access
+     */
+    List<LanguageDTO> findLanguagesForProfile(String page, String size, Authentication authentication);
 }

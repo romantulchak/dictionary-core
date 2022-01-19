@@ -1,6 +1,8 @@
 package com.dictionary.service;
 
 import com.dictionary.dto.WordDTO;
+import com.dictionary.exception.language.LanguageNotFoundException;
+import com.dictionary.exception.word.WordTranslationNotFoundException;
 import com.dictionary.security.payload.request.word.CreateWordRequest;
 import org.springframework.security.core.Authentication;
 
@@ -14,7 +16,7 @@ public interface WordService {
      * @param createWordRequest to create words for language
      * @param authentication to get user in system
      */
-    void create(CreateWordRequest createWordRequest, Authentication authentication);
+    void create(CreateWordRequest createWordRequest, Authentication authentication) throws LanguageNotFoundException;
 
     /**
      * Translates the word in two directions
@@ -26,5 +28,5 @@ public interface WordService {
      * @param languageTo language code to which it is translated Ex: us, ua, pl
      * @return List of translated words found with description
      */
-    List<WordDTO> translateWord(String word, String languageFrom, String languageTo);
+    List<WordDTO> translateWord(String word, String languageFrom, String languageTo) throws WordTranslationNotFoundException;
 }

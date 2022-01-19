@@ -21,4 +21,10 @@ public class LanguageDTO {
     @JsonView(View.LanguageView.class)
     private LocalDateTime createAt;
 
+    @JsonView(View.LanguageView.class)
+    private LocalDateTime updateAt;
+
+    @JsonView(View.LanguageView.class)
+    private PrivilegesDTO privileges;
+
 }

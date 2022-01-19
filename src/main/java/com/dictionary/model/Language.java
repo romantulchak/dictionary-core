@@ -53,6 +53,7 @@ public class Language implements Comparable<Language> {
         this.name = name;
         this.code = code;
         this.createAt = LocalDateTime.now();
+        this.updateAt = LocalDateTime.now();
     }
 
     @Override

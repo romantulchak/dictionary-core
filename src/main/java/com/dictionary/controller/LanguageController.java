@@ -7,6 +7,7 @@ import com.dictionary.service.LanguageService;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,19 +23,27 @@ public class LanguageController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('MODERATOR') OR hasRole('ADMIN')")
-    public void create(@Valid @RequestBody CreateLanguageRequest createLanguageRequest){
+    public void create(@Valid @RequestBody CreateLanguageRequest createLanguageRequest) {
         languageService.create(createLanguageRequest);
     }
 
     @GetMapping("/all")
     @JsonView(View.LanguageView.class)
-    public List<LanguageDTO> findAllLanguages(){
+    public List<LanguageDTO> findAllLanguages() {
         return languageService.findAllLanguages();
+    }
+
+    @GetMapping("/languages-for-panel")
+    @PreAuthorize("isAuthenticated()")
+    public List<LanguageDTO> findLanguagesWithPrivileges(@RequestParam(value = "page", defaultValue = "0") String page,
+                                                         @RequestParam(value = "size", defaultValue = "10") String size,
+                                                         Authentication authentication) {
+        return languageService.findLanguagesForProfile(page, size, authentication);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("isAuthenticated() && (hasRole('MODERATOR') || hasRole('ADMIN') || @userAccessToLanguage.hasAccess(authentication, #id))")
-    public void delete(@PathVariable("id") long id){
+    public void delete(@PathVariable("id") long id) {
         languageService.delete(id);
     }
 }

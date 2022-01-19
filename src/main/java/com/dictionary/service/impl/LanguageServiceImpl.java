@@ -6,11 +6,17 @@ import com.dictionary.exception.language.LanguageAlreadyExistsException;
 import com.dictionary.model.Language;
 import com.dictionary.repository.LanguageRepository;
 import com.dictionary.security.payload.request.language.CreateLanguageRequest;
+import com.dictionary.security.service.UserDetailsImpl;
 import com.dictionary.service.LanguageService;
+import com.dictionary.utility.PageableUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +55,15 @@ public class LanguageServiceImpl implements LanguageService {
     @Override
     public void delete(long id) {
         this.languageRepository.deleteById(id);
+    }
+
+    @Override
+    public List<LanguageDTO> findLanguagesForProfile(String page, String size, Authentication authentication) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Pageable pageable = PageRequest.of(PageableUtil.getPage(page), PageableUtil.getPageSize(size));
+        return languageRepository.findAll(pageable)
+                .stream()
+                .map(language -> transformer.languageToDTO(language, userDetails))
+                .collect(Collectors.toList());
     }
 }
