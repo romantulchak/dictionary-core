@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,9 +60,22 @@ public class LanguageServiceImpl implements LanguageService {
     public List<LanguageDTO> findLanguagesForProfile(String page, String size, Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Pageable pageable = PageRequest.of(PageableUtil.getPage(page), PageableUtil.getPageSize(size));
-        return languageRepository.findAll(pageable)
+        return languageRepository.findAllWithUserId(pageable).getContent()
                 .stream()
                 .map(language -> transformer.languageToDTO(language, userDetails))
-                .collect(Collectors.toList());
+                .toList();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getTotalPagesCount(String size) {
+        int pageSize = PageableUtil.getPageSize(size);
+        long totalElements = languageRepository.countAllBy();
+        if (totalElements <= pageSize){
+            return 1;
+        }
+        return totalElements / pageSize;
     }
 }

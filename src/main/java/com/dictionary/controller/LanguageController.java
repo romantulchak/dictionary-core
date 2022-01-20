@@ -46,4 +46,10 @@ public class LanguageController {
     public void delete(@PathVariable("id") long id) {
         languageService.delete(id);
     }
+
+    @GetMapping("/total-pages")
+    @PreAuthorize("isAuthenticated()")
+    public long totalPagesCount(@RequestParam(value = "size", defaultValue = "10") String size){
+        return languageService.getTotalPagesCount(size);
+    }
 }

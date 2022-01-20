@@ -7,6 +7,7 @@ import com.dictionary.dto.user.RoleDTO;
 import com.dictionary.model.Language;
 import com.dictionary.model.Role;
 import com.dictionary.model.Word;
+import com.dictionary.projection.LanguageWithUserIdProjection;
 import com.dictionary.security.service.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -26,10 +27,10 @@ public class Transformer {
         return modelMapper.map(language, LanguageDTO.class);
     }
 
-    public LanguageDTO languageToDTO(Language language, UserDetailsImpl userDetails){
+    public LanguageDTO languageToDTO(LanguageWithUserIdProjection language, UserDetailsImpl userDetails){
         LanguageDTO languageDTO = modelMapper.map(language, LanguageDTO.class);
-        boolean canModify = language.getUser().getId().equals(userDetails.getId());
-        boolean canDelete = language.getUser().getId().equals(userDetails.getId()) || !userDetails.getAuthorities().isEmpty();
+        boolean canModify = language.getUserId().equals(userDetails.getId());
+        boolean canDelete = language.getUserId().equals(userDetails.getId()) || !userDetails.getAuthorities().isEmpty();
         PrivilegesDTO privilegesDTO = new PrivilegesDTO(canModify, canDelete);
         languageDTO.setPrivileges(privilegesDTO);
         return languageDTO;

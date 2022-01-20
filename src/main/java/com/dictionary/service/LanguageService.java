@@ -41,4 +41,12 @@ public interface LanguageService {
      * @return languages with user access
      */
     List<LanguageDTO> findLanguagesForProfile(String page, String size, Authentication authentication);
+
+    /**
+     * Counts total pages by element size per page
+     *
+     * @param size number of elements per page
+     * @return total number of pages
+     */
+    long getTotalPagesCount(String size);
 }
