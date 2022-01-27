@@ -2,7 +2,9 @@ package com.dictionary.dto;
 
 import com.dictionary.model.View;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.Data;
 
+@Data
 public class PrivilegesDTO {
 
     @JsonView(View.LanguageView.class)
