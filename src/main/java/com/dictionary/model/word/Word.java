@@ -1,5 +1,7 @@
-package com.dictionary.model;
+package com.dictionary.model.word;
 
+import com.dictionary.model.Language;
+import com.dictionary.model.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
@@ -67,7 +69,10 @@ public class Word {
     @ElementCollection
     @CollectionTable(name = "word_examples", joinColumns = @JoinColumn(name = "word_id"))
     @Column(name = "example")
-    private List<String> examples;
+    private List<Example> examples;
+
+    @Size(min = 1, max = 100)
+    private String pronunciation;
 
     public Word(){}
 

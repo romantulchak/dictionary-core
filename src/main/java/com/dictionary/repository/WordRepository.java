@@ -1,6 +1,6 @@
 package com.dictionary.repository;
 
-import com.dictionary.model.Word;
+import com.dictionary.model.word.Word;
 import com.dictionary.projection.WordKeyProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

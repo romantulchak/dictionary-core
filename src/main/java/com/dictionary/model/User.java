@@ -1,5 +1,6 @@
 package com.dictionary.model;
 
+import com.dictionary.model.word.Word;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;

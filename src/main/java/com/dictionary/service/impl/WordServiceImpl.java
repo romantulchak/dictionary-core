@@ -7,7 +7,7 @@ import com.dictionary.exception.word.WordTranslationNotFoundException;
 import com.dictionary.exception.word.WordsAlreadyExistsException;
 import com.dictionary.model.Language;
 import com.dictionary.model.User;
-import com.dictionary.model.Word;
+import com.dictionary.model.word.Word;
 import com.dictionary.projection.WordKeyProjection;
 import com.dictionary.repository.LanguageRepository;
 import com.dictionary.repository.WordRepository;
