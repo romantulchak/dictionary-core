@@ -16,7 +16,7 @@ public interface LanguageService {
      * @param createLanguageRequest data to persist it to Language entity
      * @throws LanguageAlreadyExistsException if language already exists
      */
-    void create(CreateLanguageRequest createLanguageRequest) throws LanguageAlreadyExistsException;
+    void create(CreateLanguageRequest createLanguageRequest, Authentication authentication) throws LanguageAlreadyExistsException;
 
     /**
      * Finds all languages

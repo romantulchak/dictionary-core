@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,12 +29,17 @@ public class LanguageServiceImpl implements LanguageService {
      * {@inheritDoc}
      */
     @Override
-    public void create(CreateLanguageRequest createLanguageRequest) throws LanguageAlreadyExistsException {
-        if (languageRepository.existsByName(createLanguageRequest.getName())){
-            throw new LanguageAlreadyExistsException(createLanguageRequest.getName());
+    public void create(CreateLanguageRequest createLanguageRequest, Authentication authentication) throws LanguageAlreadyExistsException {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (userDetails != null){
+            if (languageRepository.existsByName(createLanguageRequest.getName())){
+                throw new LanguageAlreadyExistsException(createLanguageRequest.getName());
+            }
+            Language language = new Language(createLanguageRequest.getName(), createLanguageRequest.getCode(), userDetails.getId());
+            languageRepository.save(language);
+        }else {
+            throw new UsernameNotFoundException("User not found exception");
         }
-        Language language = new Language(createLanguageRequest.getName(), createLanguageRequest.getCode());
-        languageRepository.save(language);
     }
 
     /**
@@ -63,6 +69,7 @@ public class LanguageServiceImpl implements LanguageService {
         return languageRepository.findAllWithUserId(pageable).getContent()
                 .stream()
                 .map(language -> transformer.languageToDTO(language, userDetails))
+                .sorted()
                 .toList();
     }
 
@@ -76,6 +83,6 @@ public class LanguageServiceImpl implements LanguageService {
         if (totalElements <= pageSize){
             return 1;
         }
-        return totalElements / pageSize;
+        return (long) Math.ceil(totalElements / (double) pageSize);
     }
 }

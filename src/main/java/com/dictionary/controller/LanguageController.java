@@ -23,8 +23,8 @@ public class LanguageController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('MODERATOR') OR hasRole('ADMIN')")
-    public void create(@Valid @RequestBody CreateLanguageRequest createLanguageRequest) {
-        languageService.create(createLanguageRequest);
+    public void create(@Valid @RequestBody CreateLanguageRequest createLanguageRequest, Authentication authentication) {
+        languageService.create(createLanguageRequest, authentication);
     }
 
     @GetMapping("/all")

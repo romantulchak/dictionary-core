@@ -68,4 +68,12 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Language> languages;
+
+    public User(){
+
+    }
+
+    public User(UUID id) {
+        this.id = id;
+    }
 }

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -42,7 +43,6 @@ public class Language implements Comparable<Language> {
     @OneToMany(mappedBy = "language", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Word> words;
 
-    @NotBlank
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
@@ -50,9 +50,10 @@ public class Language implements Comparable<Language> {
     public Language() {
     }
 
-    public Language(String name, String code) {
+    public Language(String name, String code, UUID userId) {
         this.name = name;
         this.code = code;
+        this.user = new User(userId);
         this.createAt = LocalDateTime.now();
         this.updateAt = LocalDateTime.now();
     }
