@@ -1,5 +1,7 @@
 package com.dictionary.controller;
 
+import com.dictionary.exception.file.AudioCreationException;
+import com.dictionary.exception.file.FolderCreationException;
 import com.dictionary.exception.language.LanguageAlreadyExistsException;
 import com.dictionary.exception.language.LanguageNotFoundException;
 import com.dictionary.exception.user.UsernameAlreadyExistsException;
@@ -50,6 +52,18 @@ public class AdviceController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(WordAlreadyExistsException.class)
     public ResponseEntity<?> handleWordAlreadyExistsException(WordAlreadyExistsException ex, WebRequest webRequest) {
+        Map<String, Object> body = getBody(ex);
+        return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+    }
+
+    @ExceptionHandler(AudioCreationException.class)
+    public ResponseEntity<?> handleAudioCreationException(AudioCreationException ex, WebRequest webRequest) {
+        Map<String, Object> body = getBody(ex);
+        return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+    }
+
+    @ExceptionHandler(FolderCreationException.class)
+    public ResponseEntity<?> handleFolderCreationException(FolderCreationException ex, WebRequest webRequest) {
         Map<String, Object> body = getBody(ex);
         return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
     }

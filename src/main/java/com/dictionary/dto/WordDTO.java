@@ -12,4 +12,8 @@ public class WordDTO {
 
     @JsonView(View.WordView.class)
     private String description;
+
+    @JsonView(View.WordView.class)
+    private String pronunciation;
+
 }

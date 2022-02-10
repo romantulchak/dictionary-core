@@ -11,4 +11,6 @@ public class WordDescription {
     private String word;
 
     private String description;
+
+    private String source;
 }

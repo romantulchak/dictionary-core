@@ -15,6 +15,7 @@ import com.dictionary.security.payload.request.word.CreateWordRequest;
 import com.dictionary.security.payload.request.word.WordDescription;
 import com.dictionary.security.service.UserDetailsImpl;
 import com.dictionary.service.WordService;
+import com.dictionary.utility.AudioHandler;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
@@ -30,6 +31,7 @@ public class WordServiceImpl implements WordService {
     private final WordRepository wordRepository;
     private final LanguageRepository languageRepository;
     private final Transformer transformer;
+    private final AudioHandler audioHandler;
 
     /**
      * {@inheritDoc}
@@ -95,7 +97,8 @@ public class WordServiceImpl implements WordService {
      * @return initialized word
      */
     private Word initWord(User user, String key, Language language, WordDescription wordDescription) {
-        return new Word(wordDescription.getWord(), user, language, key, wordDescription.getDescription());
+        String pronunciation = audioHandler.handleAudioFromBase64(wordDescription.getSource());
+        return new Word(wordDescription.getWord(), user, language, key, wordDescription.getDescription(), pronunciation);
     }
 
     /**

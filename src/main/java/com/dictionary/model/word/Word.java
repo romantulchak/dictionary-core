@@ -71,12 +71,11 @@ public class Word {
     @Column(name = "example")
     private List<Example> examples;
 
-    @Size(min = 1, max = 100)
     private String pronunciation;
 
     public Word(){}
 
-    public Word(String name, User user, Language language, String key, String description){
+    public Word(String name, User user, Language language, String key, String description, String pronunciation){
         this.name = name;
         this.capitalName = StringUtils.capitalize(name);
         this.lowercaseName = name.toLowerCase(Locale.ROOT);
@@ -86,5 +85,6 @@ public class Word {
         this.language = language;
         this.key = key;
         this.description = description;
+        this.pronunciation = pronunciation;
     }
 }
