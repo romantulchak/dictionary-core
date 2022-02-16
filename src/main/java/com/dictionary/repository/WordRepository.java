@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface WordRepository extends JpaRepository<Word, Long> {
 
@@ -20,4 +21,5 @@ public interface WordRepository extends JpaRepository<Word, Long> {
     @Query(value = "SELECT w FROM Word w LEFT OUTER JOIN w.keys wk WHERE wk = ?1 OR w.key = ?1 AND w.language.code = ?2")
     List<Word> findByKeysInAndLanguageCode(String key, String code);
 
+    long countWordByUserId(UUID id);
 }

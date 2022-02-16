@@ -62,7 +62,7 @@ public class Word {
     @Column(name = "key")
     private List<String> keys;
 
-    @Size(min = 3, max = 500)
+    @Size(max = 500)
     @Column(name = "description")
     private String description;
 

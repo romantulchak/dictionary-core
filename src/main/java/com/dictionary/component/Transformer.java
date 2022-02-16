@@ -4,8 +4,10 @@ import com.dictionary.dto.LanguageDTO;
 import com.dictionary.dto.PrivilegesDTO;
 import com.dictionary.dto.WordDTO;
 import com.dictionary.dto.user.RoleDTO;
+import com.dictionary.dto.user.UserDTO;
 import com.dictionary.model.Language;
 import com.dictionary.model.Role;
+import com.dictionary.model.User;
 import com.dictionary.model.type.RoleType;
 import com.dictionary.model.word.Word;
 import com.dictionary.projection.LanguageWithUserIdProjection;
@@ -51,5 +53,19 @@ public class Transformer {
 
     public WordDTO wordToDTO(Word word){
         return modelMapper.map(word, WordDTO.class);
+    }
+
+    /**
+     * Converts user to DTO with total number of created languages/words by this user
+     *
+     * @param user to convert
+     * @param totalNumberOfLanguages how many languages was created by current user
+     * @param totalNumberOfWords how many words was created by current user
+     * @return converted user to DTO
+     */
+    public UserDTO userToDTO(User user, long totalNumberOfLanguages, long totalNumberOfWords){
+        return modelMapper.map(user, UserDTO.class)
+                .setTotalCreatedLanguages(totalNumberOfLanguages)
+                .setTotalCreatedLanguages(totalNumberOfWords);
     }
 }

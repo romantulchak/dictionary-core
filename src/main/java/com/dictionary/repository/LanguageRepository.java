@@ -24,4 +24,6 @@ public interface LanguageRepository extends JpaRepository<Language, Long> {
     Slice<LanguageWithUserIdProjection> findAllWithUserId(Pageable pageable);
 
     long countAllBy();
+
+    long countLanguageByUserId(UUID id);
 }
