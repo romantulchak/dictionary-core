@@ -85,4 +85,18 @@ public class LanguageServiceImpl implements LanguageService {
         }
         return (long) Math.ceil(totalElements / (double) pageSize);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<LanguageDTO> findUserLanguages(String page, String size, Authentication authentication) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Pageable pageable = PageRequest.of(PageableUtil.getPage(page), PageableUtil.getPageSize(size));
+        return languageRepository.findAllByUserId(userDetails.getId(), pageable).getContent()
+                .stream()
+                .map(transformer::languageToDTOWithDefaultPrivileges)
+                .sorted()
+                .toList();
+    }
 }

@@ -49,4 +49,14 @@ public interface LanguageService {
      * @return total number of pages
      */
     long getTotalPagesCount(String size);
+
+    /**
+     * Finds user languages with full access (modify/delete)
+     *
+     * @param page number of current page
+     * @param size number of elements per page
+     * @param authentication to get user id
+     * @return user languages with full access
+     */
+    List<LanguageDTO> findUserLanguages(String page, String size, Authentication authentication);
 }

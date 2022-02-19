@@ -44,7 +44,7 @@ public class Language implements Comparable<Language> {
     private List<Word> words;
 
     @JoinColumn(name = "user_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     public Language() {

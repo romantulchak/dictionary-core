@@ -35,6 +35,7 @@ public class LanguageController {
 
     @GetMapping("/languages-for-panel")
     @PreAuthorize("isAuthenticated()")
+    @JsonView(View.LanguageView.class)
     public List<LanguageDTO> findLanguagesWithPrivileges(@RequestParam(value = "page", defaultValue = "0") String page,
                                                          @RequestParam(value = "size", defaultValue = "10") String size,
                                                          Authentication authentication) {
@@ -51,5 +52,13 @@ public class LanguageController {
     @PreAuthorize("isAuthenticated()")
     public long totalPagesCount(@RequestParam(value = "size", defaultValue = "10") String size){
         return languageService.getTotalPagesCount(size);
+    }
+
+    @GetMapping("/for-user")
+    @PreAuthorize("isAuthenticated()")
+    public List<LanguageDTO> findUserLanguages(@RequestParam(value = "page", defaultValue = "0") String page,
+                                               @RequestParam(value = "size", defaultValue = "10") String size,
+                                               Authentication authentication){
+        return languageService.findUserLanguages(page, size, authentication);
     }
 }

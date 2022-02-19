@@ -23,6 +23,8 @@ public interface LanguageRepository extends JpaRepository<Language, Long> {
     @Query(value = "SELECT l.id as id, l.name as name, l.code as code, l.createAt as createAt, l.updateAt as updateAt, l.user.id as userId FROM Language l LEFT OUTER JOIN l.user")
     Slice<LanguageWithUserIdProjection> findAllWithUserId(Pageable pageable);
 
+    Slice<Language> findAllByUserId(UUID userId, Pageable pageable);
+
     long countAllBy();
 
     long countLanguageByUserId(UUID id);

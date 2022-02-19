@@ -51,6 +51,19 @@ public class Transformer {
         return languageDTO;
     }
 
+    /**
+     * Converts language to DTO with default privileges
+     *
+     * @param language to convert
+     * @return converted language to DTO
+     */
+    public LanguageDTO languageToDTOWithDefaultPrivileges(Language language){
+        LanguageDTO languageDTO = modelMapper.map(language, LanguageDTO.class);
+        PrivilegesDTO privileges = new PrivilegesDTO(true, true);
+        languageDTO.setPrivileges(privileges);
+        return languageDTO;
+    }
+
     public WordDTO wordToDTO(Word word){
         return modelMapper.map(word, WordDTO.class);
     }
@@ -66,6 +79,6 @@ public class Transformer {
     public UserDTO userToDTO(User user, long totalNumberOfLanguages, long totalNumberOfWords){
         return modelMapper.map(user, UserDTO.class)
                 .setTotalCreatedLanguages(totalNumberOfLanguages)
-                .setTotalCreatedLanguages(totalNumberOfWords);
+                .setTotalCreatedWords(totalNumberOfWords);
     }
 }
