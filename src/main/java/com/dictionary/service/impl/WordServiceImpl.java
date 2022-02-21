@@ -16,8 +16,11 @@ import com.dictionary.security.payload.request.word.WordDescription;
 import com.dictionary.security.service.UserDetailsImpl;
 import com.dictionary.service.WordService;
 import com.dictionary.utility.AudioHandler;
+import com.dictionary.utility.PageableUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +62,15 @@ public class WordServiceImpl implements WordService {
         WordKeyProjection keyProjection = getWordByNameAndCode(word, languageFrom).orElseThrow(WordTranslationNotFoundException::new);
         return wordRepository.findByKeysInAndLanguageCode(keyProjection.getKey(), languageTo)
                 .stream()
+                .map(transformer::wordToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<WordDTO> findWordsForUser(String page, String size, Authentication authentication) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Pageable pageable = PageRequest.of(PageableUtil.getPage(page), PageableUtil.getPageSize(size));
+        return wordRepository.findAllByUserId(userDetails.getId(), pageable).getContent().stream()
                 .map(transformer::wordToDTO)
                 .toList();
     }

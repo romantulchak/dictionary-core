@@ -2,6 +2,8 @@ package com.dictionary.repository;
 
 import com.dictionary.model.word.Word;
 import com.dictionary.projection.WordKeyProjection;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -22,4 +24,6 @@ public interface WordRepository extends JpaRepository<Word, Long> {
     List<Word> findByKeysInAndLanguageCode(String key, String code);
 
     long countWordByUserId(UUID id);
+
+    Slice<Word> findAllByUserId(UUID id, Pageable pageable);
 }

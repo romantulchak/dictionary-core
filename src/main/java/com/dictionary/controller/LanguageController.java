@@ -50,8 +50,10 @@ public class LanguageController {
 
     @GetMapping("/total-pages")
     @PreAuthorize("isAuthenticated()")
-    public long totalPagesCount(@RequestParam(value = "size", defaultValue = "10") String size){
-        return languageService.getTotalPagesCount(size);
+    public long totalPagesCount(@RequestParam(value = "size", defaultValue = "10") String size,
+                                @RequestParam(value = "isForUser", defaultValue = "false") boolean isForUser,
+                                Authentication authentication){
+        return languageService.getTotalPagesCount(size, isForUser, authentication);
     }
 
     @GetMapping("/for-user")

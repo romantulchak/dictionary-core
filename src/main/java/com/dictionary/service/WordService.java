@@ -29,4 +29,14 @@ public interface WordService {
      * @return List of translated words found with description
      */
     List<WordDTO> translateWord(String word, String languageFrom, String languageTo) throws WordTranslationNotFoundException;
+
+    /**
+     * Finds words created by user in system
+     *
+     * @param page number of current page
+     * @param size number of elements per page
+     * @param authentication to get user id
+     * @return words created by user
+     */
+    List<WordDTO> findWordsForUser(String page, String size, Authentication authentication);
 }

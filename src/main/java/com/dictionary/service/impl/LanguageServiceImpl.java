@@ -77,9 +77,15 @@ public class LanguageServiceImpl implements LanguageService {
      * {@inheritDoc}
      */
     @Override
-    public long getTotalPagesCount(String size) {
+    public long getTotalPagesCount(String size, boolean isForUser, Authentication authentication) {
         int pageSize = PageableUtil.getPageSize(size);
-        long totalElements = languageRepository.countAllBy();
+        long totalElements;
+        if (isForUser){
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            totalElements = languageRepository.countLanguageByUserId(userDetails.getId());
+        }else{
+            totalElements = languageRepository.countAllBy();
+        }
         if (totalElements <= pageSize){
             return 1;
         }

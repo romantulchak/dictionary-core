@@ -46,9 +46,11 @@ public interface LanguageService {
      * Counts total pages by element size per page
      *
      * @param size number of elements per page
+     * @param isForUser if true, only query for user-created languages, otherwise query all languages
+     * @param authentication to get user in system
      * @return total number of pages
      */
-    long getTotalPagesCount(String size);
+    long getTotalPagesCount(String size, boolean isForUser, Authentication authentication);
 
     /**
      * Finds user languages with full access (modify/delete)
