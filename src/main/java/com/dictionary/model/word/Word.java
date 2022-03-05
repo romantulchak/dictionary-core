@@ -69,13 +69,13 @@ public class Word {
     @ElementCollection
     @CollectionTable(name = "word_examples", joinColumns = @JoinColumn(name = "word_id"))
     @Column(name = "example")
-    private List<Example> examples;
+    private List<String> examples;
 
     private String pronunciation;
 
     public Word(){}
 
-    public Word(String name, User user, Language language, String key, String description, String pronunciation){
+    public Word(String name, User user, Language language, String key, String description, String pronunciation, List<String> examples){
         this.name = name;
         this.capitalName = StringUtils.capitalize(name);
         this.lowercaseName = name.toLowerCase(Locale.ROOT);
@@ -86,5 +86,6 @@ public class Word {
         this.key = key;
         this.description = description;
         this.pronunciation = pronunciation;
+        this.examples = examples;
     }
 }

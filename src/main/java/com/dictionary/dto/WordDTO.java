@@ -4,6 +4,8 @@ import com.dictionary.model.View;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class WordDTO {
 
@@ -15,5 +17,8 @@ public class WordDTO {
 
     @JsonView(View.WordView.class)
     private String pronunciation;
+
+    @JsonView(View.WordView.class)
+    private List<String> examples;
 
 }

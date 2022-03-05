@@ -66,6 +66,9 @@ public class WordServiceImpl implements WordService {
                 .toList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<WordDTO> findWordsForUser(String page, String size, Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -110,7 +113,7 @@ public class WordServiceImpl implements WordService {
      */
     private Word initWord(User user, String key, Language language, WordDescription wordDescription) {
         String pronunciation = audioHandler.handleAudioFromBase64(wordDescription.getSource());
-        return new Word(wordDescription.getWord(), user, language, key, wordDescription.getDescription(), pronunciation);
+        return new Word(wordDescription.getWord(), user, language, key, wordDescription.getDescription(), pronunciation, wordDescription.getExamples());
     }
 
     /**

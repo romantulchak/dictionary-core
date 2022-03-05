@@ -1,0 +1,1 @@
+ALTER TABLE word_examples DROP pronunciation;

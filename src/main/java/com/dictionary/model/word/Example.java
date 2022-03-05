@@ -11,8 +11,7 @@ import javax.validation.constraints.Size;
 @Setter
 public class Example {
 
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     private String example;
 
-    private String pronunciation;
 }
