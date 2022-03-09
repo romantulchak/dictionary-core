@@ -29,6 +29,9 @@ public class LanguageDTO implements Comparable<LanguageDTO> {
     @JsonView(View.LanguageView.class)
     private PrivilegesDTO privileges;
 
+    @JsonView(View.LanguageView.class)
+    private boolean isPreferred;
+
     @Override
     public int compareTo(@NotNull LanguageDTO language) {
         return Comparator.comparing(LanguageDTO::getName)

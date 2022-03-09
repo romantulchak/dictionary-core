@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Set;
 
 import static com.dictionary.utility.PrivilegesHandler.hasPrivilegesByRole;
@@ -37,17 +38,19 @@ public class Transformer {
 
     /**
      * Converts language to DTO with Privileges
+     * and set preferred language
      *
      * @param language to convert
      * @param userDetails to get user roles
      * @return converted language to DTO
      */
-    public LanguageDTO languageToDTO(LanguageWithUserIdProjection language, UserDetailsImpl userDetails){
+    public LanguageDTO languageToDTO(LanguageWithUserIdProjection language, UserDetailsImpl userDetails, Long preferredLanguageId){
         LanguageDTO languageDTO = modelMapper.map(language, LanguageDTO.class);
         boolean canModify = language.getUserId().equals(userDetails.getId()) || hasPrivilegesByRoles(Set.of(RoleType.ROLE_ADMIN.name(), RoleType.ROLE_MODERATOR.name()), userDetails);
         boolean canDelete = language.getUserId().equals(userDetails.getId()) || hasPrivilegesByRole(RoleType.ROLE_ADMIN.name(), userDetails);
         PrivilegesDTO privilegesDTO = new PrivilegesDTO(canModify, canDelete);
         languageDTO.setPrivileges(privilegesDTO);
+        languageDTO.setPreferred(Objects.equals(preferredLanguageId, language.getId()));
         return languageDTO;
     }
 

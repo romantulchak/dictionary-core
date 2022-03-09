@@ -5,6 +5,7 @@ import com.dictionary.dto.LanguageDTO;
 import com.dictionary.exception.language.LanguageAlreadyExistsException;
 import com.dictionary.model.Language;
 import com.dictionary.repository.LanguageRepository;
+import com.dictionary.repository.UserRepository;
 import com.dictionary.security.payload.request.language.CreateLanguageRequest;
 import com.dictionary.security.service.UserDetailsImpl;
 import com.dictionary.service.LanguageService;
@@ -23,6 +24,7 @@ import java.util.List;
 public class LanguageServiceImpl implements LanguageService {
 
     private final LanguageRepository languageRepository;
+    private final UserRepository userRepository;
     private final Transformer transformer;
 
     /**
@@ -62,13 +64,17 @@ public class LanguageServiceImpl implements LanguageService {
         this.languageRepository.deleteById(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<LanguageDTO> findLanguagesForProfile(String page, String size, Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Pageable pageable = PageRequest.of(PageableUtil.getPage(page), PageableUtil.getPageSize(size));
+        Long preferredLanguageId = userRepository.findUserPreferredLanguage(userDetails.getUsername());
         return languageRepository.findAllWithUserId(pageable).getContent()
                 .stream()
-                .map(language -> transformer.languageToDTO(language, userDetails))
+                .map(language -> transformer.languageToDTO(language, userDetails, preferredLanguageId))
                 .sorted()
                 .toList();
     }

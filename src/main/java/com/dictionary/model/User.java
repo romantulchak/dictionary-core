@@ -69,6 +69,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Language> languages;
 
+    @ManyToOne
+    private Language preferredLanguage;
+
     public User(){
 
     }

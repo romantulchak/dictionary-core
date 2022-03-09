@@ -4,6 +4,8 @@ import com.dictionary.model.word.Word;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -41,6 +43,7 @@ public class Language implements Comparable<Language> {
     private LocalDateTime updateAt;
 
     @OneToMany(mappedBy = "language", fetch = FetchType.LAZY, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.TRUE)
     private List<Word> words;
 
     @JoinColumn(name = "user_id")

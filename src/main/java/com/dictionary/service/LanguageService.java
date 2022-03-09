@@ -34,6 +34,7 @@ public interface LanguageService {
 
     /**
      * Finds languages with user access to modify/delete
+     * and with preferred option for user in system
      *
      * @param page number of current page
      * @param size number of elements per page

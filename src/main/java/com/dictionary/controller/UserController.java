@@ -7,10 +7,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600L)
@@ -25,6 +22,12 @@ public class UserController {
     @JsonView(View.UserView.class)
     public UserDTO getUserInformation(Authentication authentication){
         return userService.getUserInformation(authentication);
+    }
+
+    @PutMapping("/add-to-preferred")
+    @PreAuthorize("isAuthenticated()")
+    public void setLanguageToPreferred(@RequestBody String code, Authentication authentication){
+        userService.setLanguageToPreferred(code, authentication);
     }
 
 }
