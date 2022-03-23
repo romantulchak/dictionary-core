@@ -11,13 +11,13 @@ import java.util.Comparator;
 @Data
 public class LanguageDTO implements Comparable<LanguageDTO> {
 
-    @JsonView(View.LanguageView.class)
+    @JsonView({View.LanguageView.class, View.LanguageWithPreferredView.class})
     private long id;
 
-    @JsonView(View.LanguageView.class)
+    @JsonView({View.LanguageView.class, View.LanguageWithPreferredView.class})
     private String name;
 
-    @JsonView(View.LanguageView.class)
+    @JsonView({View.LanguageView.class, View.LanguageWithPreferredView.class})
     private String code;
 
     @JsonView(View.LanguageView.class)

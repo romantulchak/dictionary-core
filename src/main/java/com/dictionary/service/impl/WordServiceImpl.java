@@ -7,6 +7,7 @@ import com.dictionary.exception.word.WordTranslationNotFoundException;
 import com.dictionary.exception.word.WordsAlreadyExistsException;
 import com.dictionary.model.Language;
 import com.dictionary.model.User;
+import com.dictionary.model.word.Example;
 import com.dictionary.model.word.Word;
 import com.dictionary.projection.WordKeyProjection;
 import com.dictionary.repository.LanguageRepository;
@@ -17,6 +18,7 @@ import com.dictionary.security.service.UserDetailsImpl;
 import com.dictionary.service.WordService;
 import com.dictionary.utility.AudioHandler;
 import com.dictionary.utility.PageableUtil;
+import com.ecfinder.core.manager.ECFinderInvoker;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +37,7 @@ public class WordServiceImpl implements WordService {
     private final LanguageRepository languageRepository;
     private final Transformer transformer;
     private final AudioHandler audioHandler;
+    private final ECFinderInvoker<Example> exampleECFinderInvoker;
 
     /**
      * {@inheritDoc}
@@ -75,6 +78,17 @@ public class WordServiceImpl implements WordService {
         Pageable pageable = PageRequest.of(PageableUtil.getPage(page), PageableUtil.getPageSize(size));
         return wordRepository.findAllByUserId(userDetails.getId(), pageable).getContent().stream()
                 .map(transformer::wordToDTO)
+                .toList();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> findExamplesByWordId(long id) {
+        return exampleECFinderInvoker.invoke(id, Example.class, Word.class)
+                .stream()
+                .map(Example::getExample)
                 .toList();
     }
 

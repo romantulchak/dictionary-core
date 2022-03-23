@@ -62,4 +62,12 @@ public interface LanguageService {
      * @return user languages with full access
      */
     List<LanguageDTO> findUserLanguages(String page, String size, Authentication authentication);
+
+    /**
+     * Finds languages with preferred one
+     *
+     * @param authentication to get user id
+     * @return languages with user preferred language
+     */
+    List<LanguageDTO> findLanguagesWithPreferred(Authentication authentication);
 }

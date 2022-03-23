@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserInformation(Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        User user = userRepository.getById(userDetails.getId());
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         long totalNumberOfWords = wordRepository.countWordByUserId(user.getId());
         long totalNumberOfLanguages = languageRepository.countLanguageByUserId(user.getId());
         return transformer.userToDTO(user, totalNumberOfLanguages, totalNumberOfWords);

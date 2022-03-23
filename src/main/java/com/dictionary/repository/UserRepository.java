@@ -17,5 +17,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     boolean existsByEmail(String email);
 
     @Query(value = "SELECT u.preferredLanguage.id as preferredLanguage FROM User u WHERE u.username = ?1")
-    Long findUserPreferredLanguage(String username);
+    Long findUserPreferredLanguageId(String username);
 }

@@ -39,4 +39,12 @@ public interface WordService {
      * @return words created by user
      */
     List<WordDTO> findWordsForUser(String page, String size, Authentication authentication);
+
+    /**
+     * Find examples for word
+     *
+     * @param id word id to find his examples
+     * @return exmaples for word
+     */
+    List<String> findExamplesByWordId(long id);
 }

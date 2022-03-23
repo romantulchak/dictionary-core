@@ -42,4 +42,10 @@ public class WordController {
         return wordService.findWordsForUser(page, size, authentication);
     }
 
+    @GetMapping("/{id}/examples")
+    @PreAuthorize("isAuthenticated()")
+    @JsonView(View.WordView.class)
+    public List<String> findWordExamples(@PathVariable("id") long id){
+        return wordService.findExamplesByWordId(id);
+    }
 }

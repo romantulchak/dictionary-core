@@ -10,6 +10,9 @@ import java.util.List;
 public class WordDTO {
 
     @JsonView(View.WordView.class)
+    private long id;
+
+    @JsonView(View.WordView.class)
     private String name;
 
     @JsonView(View.WordView.class)
@@ -18,7 +21,7 @@ public class WordDTO {
     @JsonView(View.WordView.class)
     private String pronunciation;
 
-    @JsonView(View.WordView.class)
+    @JsonView(View.WordDetailsView.class)
     private List<String> examples;
 
 }

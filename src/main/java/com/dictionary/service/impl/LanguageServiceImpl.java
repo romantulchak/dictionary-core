@@ -13,11 +13,16 @@ import com.dictionary.utility.PageableUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +31,7 @@ public class LanguageServiceImpl implements LanguageService {
     private final LanguageRepository languageRepository;
     private final UserRepository userRepository;
     private final Transformer transformer;
+    private final WebClient webClient;
 
     /**
      * {@inheritDoc}
@@ -39,6 +45,12 @@ public class LanguageServiceImpl implements LanguageService {
             }
             Language language = new Language(createLanguageRequest.getName(), createLanguageRequest.getCode(), userDetails.getId());
             languageRepository.save(language);
+            webClient.post()
+                    .uri("/language/create")
+                    .body(Mono.just(createLanguageRequest), CreateLanguageRequest.class)
+                    .retrieve()
+                    .bodyToMono(CreateLanguageRequest.class)
+                    .block();
         }else {
             throw new UsernameNotFoundException("User not found exception");
         }
@@ -71,7 +83,7 @@ public class LanguageServiceImpl implements LanguageService {
     public List<LanguageDTO> findLanguagesForProfile(String page, String size, Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Pageable pageable = PageRequest.of(PageableUtil.getPage(page), PageableUtil.getPageSize(size));
-        Long preferredLanguageId = userRepository.findUserPreferredLanguage(userDetails.getUsername());
+        Long preferredLanguageId = userRepository.findUserPreferredLanguageId(userDetails.getUsername());
         return languageRepository.findAllWithUserId(pageable).getContent()
                 .stream()
                 .map(language -> transformer.languageToDTO(language, userDetails, preferredLanguageId))
@@ -109,6 +121,25 @@ public class LanguageServiceImpl implements LanguageService {
                 .stream()
                 .map(transformer::languageToDTOWithDefaultPrivileges)
                 .sorted()
+                .toList();
+    }
+
+    @Override
+    public List<LanguageDTO> findLanguagesWithPreferred(Authentication authentication) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long userPreferredLanguageId = userRepository.findUserPreferredLanguageId(userDetails.getUsername());
+        List<Language> languages = languageRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        if (userPreferredLanguageId != null){
+            OptionalInt preferredLanguageIndex = IntStream.range(0, languages.size())
+                    .filter(value -> userPreferredLanguageId == languages.get(value).getId())
+                    .findFirst();
+            if (preferredLanguageIndex.isPresent()) {
+                Language preferredLanguage = languages.remove(preferredLanguageIndex.getAsInt());
+                languages.add(0, preferredLanguage);
+            }
+        }
+        return languages.stream()
+                .map(transformer::languageToDTO)
                 .toList();
     }
 }

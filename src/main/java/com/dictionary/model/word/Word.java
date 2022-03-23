@@ -2,6 +2,7 @@ package com.dictionary.model.word;
 
 import com.dictionary.model.Language;
 import com.dictionary.model.User;
+import com.ecfinder.core.anotation.ECFEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
+@ECFEntity(tablePrefix = "word")
 @Entity
 @Table(name = "word")
 @Getter

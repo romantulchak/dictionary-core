@@ -50,6 +50,9 @@ public class Language implements Comparable<Language> {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @OneToMany(mappedBy = "preferredLanguage")
+    private List<User> preferredBy;
+
     public Language() {
     }
 

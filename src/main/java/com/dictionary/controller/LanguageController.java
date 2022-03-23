@@ -58,9 +58,17 @@ public class LanguageController {
 
     @GetMapping("/for-user")
     @PreAuthorize("isAuthenticated()")
+    @JsonView(View.LanguageView.class)
     public List<LanguageDTO> findUserLanguages(@RequestParam(value = "page", defaultValue = "0") String page,
                                                @RequestParam(value = "size", defaultValue = "10") String size,
                                                Authentication authentication){
         return languageService.findUserLanguages(page, size, authentication);
+    }
+
+    @GetMapping("/with-preferred")
+    @PreAuthorize("isAuthenticated()")
+    @JsonView(View.LanguageWithPreferredView.class)
+    public List<LanguageDTO> findLanguagesWithPreferred(Authentication authentication){
+        return languageService.findLanguagesWithPreferred(authentication);
     }
 }
