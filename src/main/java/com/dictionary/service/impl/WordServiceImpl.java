@@ -75,7 +75,7 @@ public class WordServiceImpl implements WordService {
     @Override
     public List<WordDTO> findWordsForUser(String page, String size, Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        Pageable pageable = PageRequest.of(PageableUtil.getPage(page), PageableUtil.getPageSize(size));
+        Pageable pageable = getPageable(page, size);
         return wordRepository.findAllByUserId(userDetails.getId(), pageable).getContent().stream()
                 .map(transformer::wordToDTO)
                 .toList();
@@ -89,6 +89,20 @@ public class WordServiceImpl implements WordService {
         return exampleECFinderInvoker.invoke(id, Example.class, Word.class)
                 .stream()
                 .map(Example::getExample)
+                .toList();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<WordDTO> findWordByFirstLetterForUser(String letter, String page, String size, Authentication authentication) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Pageable pageable = getPageable(page, size);
+        return wordRepository.findWordByNameStartsWithAndUserId(letter, userDetails.getId(), pageable)
+                .getContent()
+                .stream()
+                .map(transformer::wordToDTO)
                 .toList();
     }
 
@@ -187,5 +201,16 @@ public class WordServiceImpl implements WordService {
             }
         });
         return words;
+    }
+
+    /**
+     * Converts page/size from string to int type
+     *
+     * @param page current search page
+     * @param size of elements per page
+     * @return Pageable object
+     */
+    private Pageable getPageable(String page, String size) {
+        return PageRequest.of(PageableUtil.getPage(page), PageableUtil.getPageSize(size));
     }
 }

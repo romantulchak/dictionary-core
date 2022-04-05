@@ -48,4 +48,14 @@ public class WordController {
     public List<String> findWordExamples(@PathVariable("id") long id){
         return wordService.findExamplesByWordId(id);
     }
+
+    @GetMapping("/{letter}")
+    @PreAuthorize("isAuthenticated()")
+    @JsonView(View.WordView.class)
+    public List<WordDTO> findWordByFirstLetterForUser(@PathVariable("letter") String letter,
+                                                      @RequestParam(value = "page", defaultValue = "0") String page,
+                                                      @RequestParam(value = "size", defaultValue = "10") String size,
+                                                      Authentication authentication){
+        return wordService.findWordByFirstLetterForUser(letter, page, size, authentication);
+    }
 }

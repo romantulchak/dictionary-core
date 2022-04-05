@@ -26,4 +26,6 @@ public interface WordRepository extends JpaRepository<Word, Long> {
     long countWordByUserId(UUID id);
 
     Slice<Word> findAllByUserId(UUID id, Pageable pageable);
+
+    Slice<Word> findWordByNameStartsWithAndUserId(String letter, UUID id, Pageable pageable);
 }

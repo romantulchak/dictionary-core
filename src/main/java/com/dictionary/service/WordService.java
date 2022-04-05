@@ -44,7 +44,18 @@ public interface WordService {
      * Find examples for word
      *
      * @param id word id to find his examples
-     * @return exmaples for word
+     * @return examples for word
      */
     List<String> findExamplesByWordId(long id);
+
+    /**
+     * Finds words by first letter
+     *
+     * @param letter find words that start with this letter
+     * @param page number of current page
+     * @param size number of elements per page
+     * @param authentication to get user id
+     * @return words which starts with letter selected by user
+     */
+    List<WordDTO> findWordByFirstLetterForUser(String letter, String page, String size, Authentication authentication);
 }
