@@ -117,9 +117,10 @@ public class LanguageServiceImpl implements LanguageService {
     public List<LanguageDTO> findUserLanguages(String page, String size, Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Pageable pageable = PageRequest.of(PageableUtil.getPage(page), PageableUtil.getPageSize(size));
+        Long userPreferredLanguageId = userRepository.findUserPreferredLanguageId(userDetails.getUsername());
         return languageRepository.findAllByUserId(userDetails.getId(), pageable).getContent()
                 .stream()
-                .map(transformer::languageToDTOWithDefaultPrivileges)
+                .map(language -> transformer.languageToDTOWithDefaultPrivileges(language, userPreferredLanguageId))
                 .sorted()
                 .toList();
     }

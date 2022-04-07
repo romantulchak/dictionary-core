@@ -99,7 +99,7 @@ public class WordServiceImpl implements WordService {
     public List<WordDTO> findWordByFirstLetterForUser(String letter, String page, String size, Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Pageable pageable = getPageable(page, size);
-        return wordRepository.findWordByNameStartsWithAndUserId(letter, userDetails.getId(), pageable)
+        return wordRepository.findWordByUppercaseNameStartsWithAndUserId(letter, userDetails.getId(), pageable)
                 .getContent()
                 .stream()
                 .map(transformer::wordToDTO)

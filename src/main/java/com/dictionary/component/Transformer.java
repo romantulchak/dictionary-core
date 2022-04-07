@@ -44,7 +44,7 @@ public class Transformer {
      * @param userDetails to get user roles
      * @return converted language to DTO
      */
-    public LanguageDTO languageToDTO(LanguageWithUserIdProjection language, UserDetailsImpl userDetails, Long preferredLanguageId){
+    public LanguageDTO languageToDTO(LanguageWithUserIdProjection language, UserDetailsImpl userDetails, long preferredLanguageId){
         LanguageDTO languageDTO = modelMapper.map(language, LanguageDTO.class);
         boolean canModify = language.getUserId().equals(userDetails.getId()) || hasPrivilegesByRoles(Set.of(RoleType.ROLE_ADMIN.name(), RoleType.ROLE_MODERATOR.name()), userDetails);
         boolean canDelete = language.getUserId().equals(userDetails.getId()) || hasPrivilegesByRole(RoleType.ROLE_ADMIN.name(), userDetails);
@@ -60,10 +60,11 @@ public class Transformer {
      * @param language to convert
      * @return converted language to DTO
      */
-    public LanguageDTO languageToDTOWithDefaultPrivileges(Language language){
+    public LanguageDTO languageToDTOWithDefaultPrivileges(Language language, long preferredLanguageId){
         LanguageDTO languageDTO = modelMapper.map(language, LanguageDTO.class);
         PrivilegesDTO privileges = new PrivilegesDTO(true, true);
         languageDTO.setPrivileges(privileges);
+        languageDTO.setPreferred(Objects.equals(language.getId(), preferredLanguageId));
         return languageDTO;
     }
 
