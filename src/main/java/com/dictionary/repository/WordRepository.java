@@ -28,4 +28,6 @@ public interface WordRepository extends JpaRepository<Word, Long> {
     Slice<Word> findAllByUserId(UUID id, Pageable pageable);
 
     Slice<Word> findWordByUppercaseNameStartsWithAndUserId(String letter, UUID id, Pageable pageable);
+
+    Slice<Word> findWordByLanguageCode(String code, Pageable pageable);
 }

@@ -58,4 +58,14 @@ public interface WordService {
      * @return words which starts with letter selected by user
      */
     List<WordDTO> findWordByFirstLetterForUser(String letter, String page, String size, Authentication authentication);
+
+    /**
+     * Finds words by language code
+     *
+     * @param languageCode to find related words
+     * @param page number of current page
+     * @param size number of elements per page
+     * @return words related to current language
+     */
+    List<WordDTO> findWordsByLanguage(String languageCode, String page, String size);
 }

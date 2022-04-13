@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -37,6 +38,7 @@ public class LanguageServiceImpl implements LanguageService {
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public void create(CreateLanguageRequest createLanguageRequest, Authentication authentication) throws LanguageAlreadyExistsException {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         if (userDetails != null){

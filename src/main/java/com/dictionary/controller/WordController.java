@@ -58,4 +58,13 @@ public class WordController {
                                                       Authentication authentication){
         return wordService.findWordByFirstLetterForUser(letter, page, size, authentication);
     }
+
+    @GetMapping("/{languageCode}")
+    @PreAuthorize("isAuthenticated()")
+    @JsonView(View.WordView.class)
+    public List<WordDTO> findWordsByLanguageCode(@PathVariable("languageCode") String languageCode,
+                                                 @RequestParam(value = "page", defaultValue = "0") String page,
+                                                 @RequestParam(value = "size", defaultValue = "10") String size){
+        return wordService.findWordsByLanguage(languageCode, page, size);
+    }
 }
