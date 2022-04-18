@@ -49,7 +49,7 @@ public class WordController {
         return wordService.findExamplesByWordId(id);
     }
 
-    @GetMapping("/{letter}")
+    @GetMapping("/by-letter/{letter}")
     @PreAuthorize("isAuthenticated()")
     @JsonView(View.WordView.class)
     public List<WordDTO> findWordByFirstLetterForUser(@PathVariable("letter") String letter,
@@ -66,5 +66,14 @@ public class WordController {
                                                  @RequestParam(value = "page", defaultValue = "0") String page,
                                                  @RequestParam(value = "size", defaultValue = "10") String size){
         return wordService.findWordsByLanguage(languageCode, page, size);
+    }
+
+    @GetMapping("/top-words-by-language/{languageCode}")
+    @PreAuthorize("isAuthenticated()")
+    @JsonView(View.WordView.class)
+    public List<WordDTO> findTopWordsByLanguage(@PathVariable("languageCode") String languageCode,
+                                                @RequestParam(value = "page", defaultValue = "0") String page,
+                                                @RequestParam(value = "size", defaultValue = "10") String size){
+        return wordService.findTopWordsByLanguage(languageCode, page, size);
     }
 }

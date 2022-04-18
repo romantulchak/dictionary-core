@@ -120,6 +120,18 @@ public class WordServiceImpl implements WordService {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<WordDTO> findTopWordsByLanguage(String languageCode, String page, String size) {
+        Pageable pageable = getPageable(page, size);
+        return wordRepository.findWordByLanguageCodeOrderByIdDesc(languageCode, pageable)
+                .stream()
+                .map(transformer::wordToDTO)
+                .toList();
+    }
+
+    /**
      * @param createWordRequest to get words and language code
      * @param user              to get user in system
      * @param key               unique key for word to translate and translated words

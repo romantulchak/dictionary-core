@@ -68,4 +68,14 @@ public interface WordService {
      * @return words related to current language
      */
     List<WordDTO> findWordsByLanguage(String languageCode, String page, String size);
+
+    /**
+     * Fins to top words for language
+     *
+     * @param languageCode to find related words
+     * @param page number of current page
+     * @param size number of elements per page
+     * @return top words for current language
+     */
+    List<WordDTO> findTopWordsByLanguage(String languageCode, String page, String size);
 }
